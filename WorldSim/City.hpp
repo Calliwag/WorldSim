@@ -15,7 +15,6 @@ public:
 	float Age = 0;
 	int Population = 0;
 	int DeltaPopulation = 0;
-	int Capacity = 1000000;
 
 	City(int _Index, shared_ptr<World> _WorldPtr, Vec2i _Position);
 

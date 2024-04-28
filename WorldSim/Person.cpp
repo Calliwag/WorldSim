@@ -81,23 +81,25 @@ void Person::MoveToCityShallow(shared_ptr<City> TargetCity)
 float Person::GetCityMatch(shared_ptr<City> TargetCity)
 {
 	float CityMatch = 0;
-	for (int i = 0; i < Qualities.size(); i++)
+	if (TargetCity->Population > 0)
 	{
-		CityMatch += 1 - abs(Qualities[i] - TargetCity->Qualities[i]);
+		for (int i = 0; i < Qualities.size(); i++)
+		{
+			CityMatch += 1 - abs(Qualities[i] - TargetCity->Qualities[i]);
+		}
+		CityMatch -= 5 * abs(TargetCity->Age - Age) / 80;
+		CityMatch -= abs(1 - TargetCity->Population / CityPtr->Population);
+		CityMatch += abs(TargetCity->DeltaPopulation / TargetCity->Population);
+	}
+	else
+	{
+		CityMatch += 1;
 	}
 	if (TargetCity != CityPtr)
 	{
 		CityMatch += 0.5;
 	}
-	CityMatch -= abs(TargetCity->Age - Age) / 80;
-	CityMatch -= TargetCity->Population / TargetCity->Capacity;
 	return CityMatch;
-}
-
-bool Person::CheckDeath()
-{
-	if (Age > 80) Die();
-	return Dead;
 }
 
 void Person::Die()
@@ -107,11 +109,11 @@ void Person::Die()
 	{
 		Partners[i]->Partners = {};
 	}
-	for (int i = 0; i < WorldPtr->Partners.size(); i++)
-	{
-		if (WorldPtr->Partners[i][0]->Index == Index || WorldPtr->Partners[i][1]->Index == Index)
-		{
-			WorldPtr->Partners.erase(WorldPtr->Partners.begin() + i);
-		}
-	}
+	//for (int i = 0; i < WorldPtr->Partners.size(); i++)
+	//{
+	//	if (WorldPtr->Partners[i][0]->Index == Index || WorldPtr->Partners[i][1]->Index == Index)
+	//	{
+	//		WorldPtr->Partners.erase(WorldPtr->Partners.begin() + i);
+	//	}
+	//}
 }

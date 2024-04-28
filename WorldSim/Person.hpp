@@ -27,7 +27,5 @@ public:
 
 	float GetCityMatch(shared_ptr<City> MatchCity);
 
-	bool CheckDeath();
-
 	void Die();
 };

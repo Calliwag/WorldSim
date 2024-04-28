@@ -9,12 +9,27 @@
 #include <sstream>
 #include <string>
 #include <tuple>
+#define SDL_MAIN_HANDLED
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_opengl.h>
+#include <imgui.h>
+#include <imgui_impl_sdl2.h>
+#include <imgui_impl_opengl3.h>
+#include <implot.h>
+#include <thread>
+#include <raylib.h>
 
 #define Vec2i glm::ivec2
 
 using namespace std;
 
-inline auto RandomInt(int Max) { return std::rand() % Max; }
+inline auto RandomInt(int Max) { return std::rand() % max(1,Max); }
+
+template<typename T>
+inline void VectorRemove(vector<T>& vec, size_t index) {
+	vec[index] = move(vec.back());
+	vec.pop_back();
+}
 
 struct IntFloatPair
 {

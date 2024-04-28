@@ -28,17 +28,27 @@ void City::UpdateResidentList()
 void City::UpdateQualities()
 {
 	array<float, 10> AverageQualities = {};
-	for (int i = 0; i < ResidentList.size(); i++)
+	if (Population > 0)
 	{
-		if (ResidentList[i]->Dead) continue;
+		for (int i = 0; i < ResidentList.size(); i++)
+		{
+			if (ResidentList[i]->Dead) continue;
+			for (int q = 0; q < AverageQualities.size(); q++)
+			{
+				AverageQualities[q] += ResidentList[i]->Qualities[q];
+			}
+		}
 		for (int q = 0; q < AverageQualities.size(); q++)
 		{
-			AverageQualities[q] += ResidentList[i]->Qualities[q];
+			AverageQualities[q] /= Population;
 		}
 	}
-	for (int q = 0; q < AverageQualities.size(); q++)
+	if (Population == 0)
 	{
-		AverageQualities[q] /= Population;
+		for (int i = 0; i < 10; i++)
+		{
+			AverageQualities[i] = 0.5;
+		}
 	}
 	Qualities = AverageQualities;
 }
@@ -46,11 +56,19 @@ void City::UpdateQualities()
 void City::UpdateAge()
 {
 	float AverageAge = 0;
-	for (int i = 0; i < ResidentList.size(); i++)
+	if (Population > 0)
 	{
-		if(!ResidentList[i]->Dead) AverageAge += ResidentList[i]->Age;
+		for (int i = 0; i < ResidentList.size(); i++)
+		{
+			if (!ResidentList[i]->Dead) AverageAge += ResidentList[i]->Age;
+		}
+		AverageAge = AverageAge / Population;
 	}
-	Age = AverageAge / Population;
+	else
+	{
+		AverageAge = 0;
+	}
+	Age = AverageAge;
 }
 
 vector<vector<shared_ptr<Person>>> City::FindPotentialPartners()
